@@ -1,18 +1,18 @@
-const express = require("express");
-const cors = require("cors");
-const bp = require("body-parser");
-const fetch = require("node-fetch");
+const express = require('express');
+const cors = require('cors');
+const bp = require('body-parser');
+const fetch = require('node-fetch');
 
 const app = express();
 app.use(cors());
 app.use(bp.urlencoded({ extended: false }));
 app.use(bp.json());
-app.use(require("morgan")("dev"));
+app.use(require('morgan')('dev'));
 
 const { AIRTABLE_API_KEY, BASE_ID } = process.env;
 const port = process.env.PORT || 5000;
 
-app.post("/createEvent", (req, res) => {
+app.post('/createEvent', (req, res) => {
   const event = req.body;
   const payload = {
     records: [
@@ -23,11 +23,11 @@ app.post("/createEvent", (req, res) => {
   };
   console.log(event);
   fetch(`https://api.airtable.com/v0/${BASE_ID}/Events`, {
-    method: "post",
+    method: 'post',
     body: JSON.stringify(payload),
     headers: {
-      Authorization: `Bearer ${AIRTABLE_API_KEY}`, 
-      "Content-Type": "application/json", 
+      Authorization: `Bearer ${AIRTABLE_API_KEY}`,
+      'Content-Type': 'application/json',
     },
   })
     .then((res) => res.json())
@@ -40,19 +40,13 @@ app.post("/createEvent", (req, res) => {
     });
 });
 
-app.post("/deleteEvent", (req, res) => {
-  console.log(req.body);
-
-
-  fetch(
-    `https://api.airtable.com/v0/${BASE_ID}/Events/${req.body.id}`,
-    {
-      method: "delete",
-      headers: {
-        Authorization: `Bearer ${AIRTABLE_API_KEY}`,
-      },
-    }
-  )
+app.post('/deleteEvent', (req, res) => {
+  fetch(`https://api.airtable.com/v0/${BASE_ID}/Events/${req.body.id}`, {
+    method: 'delete',
+    headers: {
+      Authorization: `Bearer ${AIRTABLE_API_KEY}`,
+    },
+  })
     .then((res) => res.json())
     .then((result) => {
       console.log(result);
@@ -64,5 +58,5 @@ app.post("/deleteEvent", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
+  console.log(`🚀 Listening on port ${port}`);
 });
